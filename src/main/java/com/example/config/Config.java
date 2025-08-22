@@ -4,10 +4,10 @@ import java.util.Properties;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Config {
-    public static String WORKDIR = System.getProperty("user,dir");
+    public static final String WORKDIR = System.getProperty("user.dir");
     private static final Dotenv dotenv = Dotenv.load();
 
-    public static Properties getProducerProperties() {
+    public final static Properties getProducerProperties() {
         Properties props = new Properties();
         props.put("bootstrap.servers", dotenv.get("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092"));
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -17,7 +17,7 @@ public class Config {
         return props;
     }
 
-    public static Properties getConsumerProperties() {
+    public final static Properties getConsumerProperties() {
         Properties props = new Properties();
         props.put("bootstrap.servers", dotenv.get("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092"));
         props.put("group.id", dotenv.get("KAFKA_CONSUMER_GROUP_ID", "my-group"));
@@ -32,6 +32,16 @@ public class Config {
     public static Properties getETHProperties(){
         Properties props = new Properties();
         props.put("eth.apiKey", dotenv.get("ETHERSCAN_TOKEN"));
+        return props;
+    }
+
+    public static Properties getClickhouseProperties(){
+        Properties props = new Properties();
+        props.put("clickhouse.url", dotenv.get("CLICKHOUSE_URL", "localhost"));
+        props.put("clickhouse.port", dotenv.get("CLICKHOUSE_PORT", "9000"));
+        props.put("clickhouse.db", dotenv.get("CLICKHOUSE_DB", "default"));
+        props.put("clickhouse.user", dotenv.get("CLICKHOUSE_USER", "default"));
+        props.put("clickhouse.password", dotenv.get("CLICKHOUSE_PASSWORD", ""));
         return props;
     }
 

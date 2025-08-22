@@ -4,11 +4,11 @@ import com.example.config.Config;
 import com.example.service.CryptoHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.common.Logging;
+import com.example.schema.Response;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Properties;
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -37,7 +37,7 @@ public class ETH implements CryptoHandler{
                 return null;
             }
 
-           Logging.info_message("Response Status code is " + status);
+            Logging.info_message("Response Status code is " + status);
             BufferedReader input = new BufferedReader(
                     new InputStreamReader(conn.getInputStream()));
             String inputLine;
@@ -62,14 +62,17 @@ public class ETH implements CryptoHandler{
     @Override
     public Map<String, Object> parseData(String rawdata) throws IOException{
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> result = mapper.readValue(
-            rawdata,
-            mapper.getTypeFactory().constructMapType(
-                HashMap.class,
-                String.class, 
-                Object.class
-                )
-            );
-        return result;
+        Response.ETHResponse result = mapper.readValue(rawdata, Response.ETHResponse.class);
+        if(!"1".equals(result.status) || !"OK".equals(result.message)){
+            Logging.error_message("API Error: " + result.message);
+            throw new IOException("API Error: " + result.message);
+        }
+        else{
+            Logging.info_message("API Success");
+            return mapper.convertValue(
+                result.result, 
+                new com.fasterxml.jackson.core.type.TypeReference<Map<String, Object>>() {}
+                );
+        }
     }
 }

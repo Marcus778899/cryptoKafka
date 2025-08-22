@@ -4,7 +4,8 @@ import java.util.Map;
 import java.io.IOException;
 
 import com.example.handler.Comsuer;
-import com.example.service.impl.ETH;;
+import com.example.service.cryptoImpl.ETH;
+import com.example.common.Logging;
 
 public class App 
 {
@@ -19,7 +20,7 @@ public class App
         
         for ( String key : urlValue.keySet()){
             String message = String.format("The %s is %s", key, urlValue.get(key));
-            System.out.println(message);
+            Logging.info_message(message);
         }
     }
 }

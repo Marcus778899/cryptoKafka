@@ -1,7 +1,9 @@
-package com.example.service.impl;
+package com.example.service.cryptoImpl;
 
 import com.example.config.Config;
 import com.example.service.CryptoHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.common.Logging;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -31,11 +33,11 @@ public class ETH implements CryptoHandler{
 
             int status = conn.getResponseCode();
             if (status != 200) {
-                System.out.println("HTTP Error code: " + status);
+                Logging.warn_message("HTTP Error code: " + status);
                 return null;
             }
 
-            System.out.println("Response Status code is " + status);
+           Logging.info_message("Response Status code is " + status);
             BufferedReader input = new BufferedReader(
                     new InputStreamReader(conn.getInputStream()));
             String inputLine;
@@ -48,7 +50,7 @@ public class ETH implements CryptoHandler{
 
             return content.toString();
         } catch (IOException e) {
-            System.out.println("Error Occurred: " + e.getMessage());
+            Logging.error_message("Error Occurred: " + e.getMessage());
             return null; // Return null on exception
         } finally {
             if (conn != null) {
@@ -59,8 +61,15 @@ public class ETH implements CryptoHandler{
 
     @Override
     public Map<String, Object> parseData(String rawdata) throws IOException{
-        Map<String, Object> a = new HashMap<>();
-        a.put("url", rawdata);
-        return a;
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> result = mapper.readValue(
+            rawdata,
+            mapper.getTypeFactory().constructMapType(
+                HashMap.class,
+                String.class, 
+                Object.class
+                )
+            );
+        return result;
     }
 }

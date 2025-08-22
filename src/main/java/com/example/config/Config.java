@@ -4,6 +4,7 @@ import java.util.Properties;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Config {
+    public static String WORKDIR = System.getProperty("user,dir");
     private static final Dotenv dotenv = Dotenv.load();
 
     public static Properties getProducerProperties() {
@@ -33,4 +34,5 @@ public class Config {
         props.put("eth.apiKey", dotenv.get("ETHERSCAN_TOKEN"));
         return props;
     }
+
 }

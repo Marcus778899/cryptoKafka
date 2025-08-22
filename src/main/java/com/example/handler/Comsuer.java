@@ -1,7 +1,8 @@
 package com.example.handler;
 
 import java.util.Properties;
-import com.example.config.Config;;
+import com.example.config.Config;
+import com.example.common.Logging;
 
 public class Comsuer {
     Properties comsuerProps = Config.getConsumerProperties();
@@ -12,6 +13,6 @@ public class Comsuer {
     }
 
     public void printEnv(){
-        System.out.println(this.comsuerProps);
+        Logging.info_message(comsuerProps.toString());
     }
 }   

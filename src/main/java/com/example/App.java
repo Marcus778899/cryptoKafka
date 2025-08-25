@@ -1,16 +1,19 @@
 package com.example;
 
 import java.util.Map;
+import java.util.List;
 import java.io.IOException;
 
 import com.example.handler.Producer;
 import com.example.service.cryptoImpl.ETH;
 import com.example.common.Logging;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.SQLException;
+import com.example.db.ClickhouseDriver;
 
 public class App 
 {
-    public static void main( String[] args ) throws IOException
+    public static void main( String[] args ) throws IOException, SQLException
     {
         Logging.info_message("Application starting...");
 

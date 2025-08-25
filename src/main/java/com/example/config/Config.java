@@ -1,6 +1,7 @@
 package com.example.config;
 
 import java.util.Properties;
+import com.zaxxer.hikari.HikariConfig;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Config {
@@ -35,14 +36,18 @@ public class Config {
         return props;
     }
 
-    public static Properties getClickhouseProperties(){
-        Properties props = new Properties();
-        props.put("clickhouse.url", dotenv.get("CLICKHOUSE_URL", "localhost"));
-        props.put("clickhouse.port", dotenv.get("CLICKHOUSE_PORT", "9000"));
-        props.put("clickhouse.db", dotenv.get("CLICKHOUSE_DB", "default"));
-        props.put("clickhouse.user", dotenv.get("CLICKHOUSE_USER", "default"));
-        props.put("clickhouse.password", dotenv.get("CLICKHOUSE_PASSWORD", ""));
-        return props;
+    public static HikariConfig getClickhouseProperties(){
+        HikariConfig config = new HikariConfig();
+        String url = dotenv.get("CLICKHOUSE_URL");
+        String port = dotenv.get("CLICKHOUSE_PORT");
+        String database = dotenv.get("CLICKHOUSE_DATABASE");
+        config.setJdbcUrl("jdbc:clickhouse://" + url + ":" + port + "/" + database);
+        config.setUsername(dotenv.get("CLICKHOUSE_USER"));
+        config.setPassword(dotenv.get("CLICKHOUSE_PASSWORD"));
+        config.setDriverClassName("com.clickhouse.jdbc.ClickHouseDriver");
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        return config;
     }
-
 }

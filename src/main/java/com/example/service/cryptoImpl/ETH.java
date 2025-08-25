@@ -1,7 +1,6 @@
 package com.example.service.cryptoImpl;
 
 import com.example.config.Config;
-import com.example.service.CryptoHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.common.Logging;
 import com.example.schema.Response;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class ETH implements CryptoHandler{
+public class ETH implements CryptoInterface{
 
     Properties ETHSetting = Config.getETHProperties();
 
@@ -24,7 +23,7 @@ public class ETH implements CryptoHandler{
         );
 
     @Override
-    public String fetchRawData() {
+    public String fetchRawData() throws IOException {
         HttpURLConnection conn = null;
         try {
             URL url = new URL(sourceUrl); // Moved inside try block
@@ -34,7 +33,7 @@ public class ETH implements CryptoHandler{
             int status = conn.getResponseCode();
             if (status != 200) {
                 Logging.warn_message("HTTP Error code: " + status);
-                return null;
+                throw new IOException("HTTP Error code: " + status);
             }
 
             Logging.info_message("Response Status code is " + status);
@@ -49,9 +48,6 @@ public class ETH implements CryptoHandler{
             input.close();
 
             return content.toString();
-        } catch (IOException e) {
-            Logging.error_message("Error Occurred: " + e.getMessage());
-            return null; // Return null on exception
         } finally {
             if (conn != null) {
                 conn.disconnect(); // Ensure connection is always closed

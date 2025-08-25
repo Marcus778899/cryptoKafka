@@ -1,15 +1,14 @@
 package com.example;
 
 import java.util.Map;
-import java.util.List;
 import java.io.IOException;
 
-import com.example.handler.Producer;
+import com.example.service.cryptoImpl.CryptoInterface;
 import com.example.service.cryptoImpl.ETH;
+import com.example.service.handler.Producer;
 import com.example.common.Logging;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.SQLException;
-import com.example.db.ClickhouseDriver;
 
 public class App 
 {
@@ -21,7 +20,7 @@ public class App
         Producer kafkaProducer = new Producer();
 
         // 2. Fetch cryptocurrency price data
-        ETH cryptoInstance = new ETH();
+        CryptoInterface cryptoInstance = new ETH();
         Map<String, Object> priceData = cryptoInstance.getPriceData();
         
         if (priceData != null && !priceData.isEmpty()) {

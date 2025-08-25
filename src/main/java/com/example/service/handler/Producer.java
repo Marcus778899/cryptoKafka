@@ -1,4 +1,4 @@
-package com.example.handler;
+package com.example.service.handler;
 
 import java.util.Properties;
 import com.example.config.Config;

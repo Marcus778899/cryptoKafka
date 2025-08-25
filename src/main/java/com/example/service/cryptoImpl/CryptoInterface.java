@@ -1,9 +1,9 @@
-package com.example.service;
+package com.example.service.cryptoImpl;
 
 import java.io.IOException;
 import java.util.Map;
 
-public interface CryptoHandler {
+public interface CryptoInterface {
     /*
      * crapes the price data for a specific cryptocurrency.
      * @return A JSON formatted string with the price data.
